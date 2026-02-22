@@ -1,5 +1,7 @@
-    import java.util.Arrays;
-    
+import java.util.Arrays;
+import edu.princeton.cs.algs4.In;
+import edu.princeton.cs.algs4.StdIn;
+import edu.princeton.cs.algs4.StdOut;    
     public class Autocomplete {
         private final Term[] terms;
 
@@ -53,22 +55,30 @@
     }
 
     // unit testing
-    public static void main(String[] args){
-        Term[] terms = {
-        new Term("apple", 10),
-        new Term("apply", 20),
-        new Term("ape", 5),
-        new Term("bat", 30)
-    };
+    public static void main(String[] args) {
 
+    // read in the terms from a file
+    String filename = args[0];
+    In in = new In(filename);
+    int n = in.readInt();
+    Term[] terms = new Term[n];
+    for (int i = 0; i < n; i++) {
+        long weight = in.readLong();           // read the next weight
+        in.readChar();                         // scan past the tab
+        String query = in.readLine();          // read the next query
+        terms[i] = new Term(query, weight);    // construct the term
+    }
+
+    // read in queries from standard input and print the top k matching terms
+    int k = Integer.parseInt(args[1]);
     Autocomplete autocomplete = new Autocomplete(terms);
-    
-    System.out.println("Matches for 'ap': " + autocomplete.numberOfMatches("ap"));
-
-    Term[] results = autocomplete.allMatches("ap");
-    for (Term t : results) {
-        System.out.println(t);
+    while (StdIn.hasNextLine()) {
+        String prefix = StdIn.readLine();
+        Term[] results = autocomplete.allMatches(prefix);
+        StdOut.printf("%d matches\n", autocomplete.numberOfMatches(prefix));
+        for (int i = 0; i < Math.min(k, results.length); i++)
+            StdOut.println(results[i]);
     }
-    }
+}
 
 }
