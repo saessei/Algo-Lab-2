@@ -47,15 +47,18 @@ public class Term implements Comparable<Term> {
         public int compare(Term v, Term w){
             String s1 = v.query;
             String s2 = w.query;
-            int minLen = Math.min(s1.length(), s2.length());
-            int limit = Math.min(minLen, r);
+            int n1= s1.length();
+            int n2 = s2.length();
 
-            for (int = 0; i < limit, i++) {
+            for (int i= 0; i < r; i++) {
+                if (i >= n1 && i >= n2) return 0; // if both strings are shorter than r and end
+                if (i >= n1) return -1; // if s1 is shorter than s2
+                if (i >= n2) return 1; // vice versa
+
                 if (s1.charAt(i) < s2.charAt(i)) return -1;
                 if (s1.charAt(i) > s2.charAt(i)) return 1;
             }
-
-            if (limit == r) return 0;
+            return 0;
         }
     }
 
@@ -78,4 +81,5 @@ public class Term implements Comparable<Term> {
         System.out.println("Natural compare: " + t1.compareTo(t2));
         System.out.println("Prefix (3) compare: " + Term.byPrefixOrder(3).compare(t1, t2));
     }
+}
 
